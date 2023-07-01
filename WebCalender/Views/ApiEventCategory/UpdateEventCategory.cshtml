@@ -1,0 +1,51 @@
+﻿@model WebCalender.Models.CalendarEventCategory
+
+@{
+    ViewData["Title"] = "UpdateEventCategory";
+}
+
+<h1>UpdateEventCategory</h1>
+
+<h4>CalendarEventCategory</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="UpdateEventCategory" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="EventId" class="control-label"></label>
+                <input asp-for="EventId" class="form-control" readonly/>
+                <span asp-validation-for="EventId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EventName" class="control-label"></label>
+                <input asp-for="EventName" class="form-control" />
+                <span asp-validation-for="EventName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EventColor" class="control-label"></label>
+                <input asp-for="EventColor" class="form-control" />
+                <span asp-validation-for="EventColor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RemarkPosition" class="control-label"></label>
+                <select asp-for="RemarkPosition" class="form-control">
+                    <option value="Footer">Footer</option>
+                    <option value="InPlace">InPlace</option>
+                    <option value="None">None</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary mt-2" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="GetEventCategories">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

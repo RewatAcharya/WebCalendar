@@ -1,0 +1,52 @@
+﻿@model IEnumerable<WebCalender.Models.CalendarEventCategory>
+
+@{
+    ViewData["Title"] = "Read";
+}
+
+<h1>Your Events are shown below:-</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="AddEventCategories">Create New</a>
+</p>
+<table class="table table-responsive table-bordered border-secondary table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.EventId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EventName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EventColor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RemarkPosition)
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.EventId
+            </td>
+            <td>
+                @item.EventName
+            </td>
+            <td>
+                @item.EventColor
+            </td>
+            <td>
+                @item.RemarkPosition
+            </td>
+            <td>
+                    <a class="btn btn-outline-primary" asp-action="UpdateEventCategory" asp-controller="ApiEventCategory" asp-route-id="@item.EventId">Edit</a>
+                    <a class="btn btn-outline-danger" asp-action="DeleteEventCategory" asp-controller="ApiEventCategory" asp-route-id="@item.EventId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

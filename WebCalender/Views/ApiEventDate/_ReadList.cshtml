@@ -1,0 +1,24 @@
+﻿@model List<WebCalender.Models.CalendarEventDate>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NepaliDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EventName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EventDescription)
+        </td>
+        <td>
+            <form asp-action="Delete" method="post" method="post" data-ajax="true" data-ajax-method="post" data-ajax-confirm="Are you sure? Delete @item.EventName">
+                <input type="hidden" value="@item.DateId" name="id" />
+                <input type="submit" value="Delete" class="btn btn-danger" />
+            </form>
+        </td>
+    </tr>
+}

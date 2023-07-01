@@ -1,0 +1,68 @@
+﻿@model IEnumerable<WebCalender.Models.CalendarEventDate>
+
+@{
+    ViewData["Title"] = "Read";
+}
+
+<h1>Read</h1>
+
+<form asp-controller="ApiEventDate" asp-action="Read" id="myForm" method="get" onchange="changeMonth()">
+    <span>2080</span>
+    <select id="months" name="month">
+        <option value="1">Baishak</option>
+        <option value="2">Jesth</option>
+        <option value="3">Asar</option>
+        <option value="4">Shrawn</option>
+        <option value="5">Bhadra</option>
+        <option value="6">Aswin</option>
+        <option value="7">Kartik</option>
+        <option value="8">Mangsir</option>
+        <option value="9">Poush</option>
+        <option value="10">Magh</option>
+        <option value="11">Falgun</option>
+        <option value="12">Chaitra</option>
+    </select>
+</form>
+<script>
+    var selectElement = document.getElementById('months');
+
+    selectElement.addEventListener('change', function () {
+        localStorage.setItem('selectedMonth', selectElement.value);
+        document.getElementById('myForm').submit();
+    });
+
+    window.addEventListener('load', function () {
+        var selectedMonth = localStorage.getItem('selectedMonth');
+        if (selectedMonth) {
+            selectElement.value = selectedMonth;
+        }
+    });
+</script>
+<a asp-action="ReadList" asp-controller="ApiEventDate" data-ajax="true" data-ajax-method="get" data-ajax-update="#readList" hidden id="btnlist"></a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DateId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NepaliDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EventName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EventDescription)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="readList">
+
+    </tbody>
+</table>
+<script>
+    $(document).ready(function(){
+        $('#btnlist').click();
+    });
+</script>
