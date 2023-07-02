@@ -1,10 +1,8 @@
 ﻿
-@model IEnumerable<DayList>
 
 @{
     ViewData["Title"] = "Home Page";
-    var eventDayList = ViewBag.EventDayList as List<CalendarEventDate>;
-    var eventList = ViewBag.EventList as List<CalendarEventCategory>;
+   
 }
 
 
@@ -12,7 +10,7 @@
     <h2 class="text-center">Calender <span>2080</span></h2>
     <div class="row">
         <div class="col-6">
-            <form asp-controller="Home" asp-action="Index" id="myForm" method="get" onchange="changeMonth()">
+            <form asp-controller="Home" asp-action="Calendar" data-ajax="true" data-ajax-method="get" data-ajax-update="#calendar">
                 <h5><select id="months" name="month">
                     <option value="1">Baishak</option>
                     <option value="2">Jesth</option>
@@ -27,148 +25,34 @@
                     <option value="11">Falgun</option>
                     <option value="12">Chaitra</option>
                     </select>
+                    <input class="btn btn-primary" id="selectMonth" type="submit" value="submit" hidden />
+
                 </h5>
             </form>
             <script>
-                var selectElement = document.getElementById('months');
+                $(document).ready(function () {
+                    $('#months').on('change', function () {
+                        $('#selectMonth').click();
+                        $('#calendarMonth')[0].click();
+                    });
 
-                selectElement.addEventListener('change', function () {
-                    localStorage.setItem('selectedMonth', selectElement.value);
-                    document.getElementById('myForm').submit();
+                    $('#calendarMonth')[0].click();
+
+
                 });
 
-                window.addEventListener('load', function () {
-                    var selectedMonth = localStorage.getItem('selectedMonth');
-                    if (selectedMonth) {
-                        selectElement.value = selectedMonth;
-                    }
-                });
             </script>
         </div>
+
+        <a asp-action="Calendar" asp-controller="Home" data-ajax="true" data-ajax-method="get" data-ajax-update="#calendar" id="calendarMonth" hidden>GetCalendar</a>
+
         <div class="col-6 text-end">Dummy text</div>
     </div>
-    <div class="row mt-4">
-        <div class="col-12">
-            <table class="table table-responsive table-bordered text-center p-2 mb-2" style="box-shadow: 0.5rem 0.5rem black, -0.5rem -0.5rem #ccc">
-                <thead>
-                    <tr class="bg-info" style="border: 3px solid black;">
-                        <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Sun</th>
-                        <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Mon</th>
-                        <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Tue</th>
-                        <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Wed</th>
-                        <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Thu</th>
-                        <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Fri</th>
-                        <th class="bg-opacity-90 bg-danger pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Sat</th>
-                    </tr>
-                </thead>
-                <tbody class="mt-2">
-                    @{
-                        int maxval = Model.Max(m => m.Day);
-                        int year = Model.Min(m => m.Year);
-                        int month = Model.Min(m => m.Month);
-                        int count = 1;
-                        DateTime currentDate = Model.Min(m => m.EnglishDate);
-                        int startDayOfWeek = (int)currentDate.DayOfWeek;
-                        int offset = (startDayOfWeek + 7) % 7;
-                        //finding the total box
-                        int totalbox = offset + maxval;
-                        //finding the remaining box to fit
-                        int remain = totalbox - 35;
-                        //finding the new value
-                        int newVal = maxval - remain + 1;
-                        count = 1 - offset;
-                        
-                    }
-                    @for (int i = 0; i < 5; i++)
-                    {
-                        <tr>
-                            @for (int j = 0; j < 7; j++)
-                            {
-                                <td style="border: 1px solid black;">
-                                    @{
-                                        string tdColor = "black";
-                                        if (j == 6)
-                                        {
-                                            tdColor = "red";
-                                        }
-                                    }
-                                        @if (count > 0 && count <= maxval)
-                                        {
-                                            string today = year + "-" + month + "-" + count;
-                                            foreach (var item in eventDayList)
-                                            {
-                                                foreach (var item2 in eventList)
-                                                {
-                                                    if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "InPlace")
-                                                    {
-                                                        tdColor = item2.EventColor;
-                                                        <span style="float: left;color: @tdColor">@item.EventDescription</span>
-                                                        <br />
-                                                    }
-                                                    if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "None")
-                                                    {
-                                                        tdColor = item2.EventColor;
-                                                    }
-                                                }
-                                            }
-                                            <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                            <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@count</span>
-                                            </a>
-                                            <br />
-                                        <span style="float: right; color: @tdColor">@Model.First(d => d.Year == year && d.Month == month && d.Day == count).EnglishDate.Day</span>
-                                        }
-                                        @if (newVal <= maxval)
-                                        {
-                                            string today = year + "-" + month + "-" + newVal;
-                                            foreach (var item in eventDayList)
-                                            {
-                                                foreach (var item2 in eventList)
-                                                {
-                                                    if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "InPlace")
-                                                    {
-                                                    tdColor = item2.EventColor;
-                                                    <span style="color: @tdColor">@item.EventDescription</span>
-                                                    <br />
-                                                    }
-                                                    if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "None")
-                                                    {
-                                                        tdColor = item2.EventColor;
-                                                    }
-                                                }
-                                            }
-                                            <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                            <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@newVal</span>
-                                            </a>
-                                            <br />
-                                        <span style="float: right; color: @tdColor">@Model.FirstOrDefault(d => d.Year == year && d.Month == month && d.Day == newVal).EnglishDate.Day</span>
-                                        }
-                                </td>
-                                count++;
-                                newVal++;
-                            }
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            <ul class="list list-group list-group-horizontal-lg m-3" style="font-size: 20px; list-style: none;">
-                @foreach (var item in eventDayList)
-                {
-                    foreach (var item2 in eventList)
-                    {
-                        if (item.EventName == item2.EventName && item2.RemarkPosition == "Footer")
-                        {
-                            <li class="list-group-item" style="color: @item2.EventColor">@item.EventDescription at @item.NepaliDate</li>
-                        }
-                    }
-                }
-            </ul>
-        </div>
+    <div class="row mt-4" id="calendar">
+       
     </div>
 </div>
 
 
 
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog" id="page">
-    </div>
-</div>
+

@@ -5,8 +5,10 @@
 }
 
 <h1>Read</h1>
+@ViewBag.month
 
-<form asp-controller="ApiEventDate" asp-action="Read" id="myForm" method="get" onchange="changeMonth()">
+<form asp-controller="ApiEventDate" asp-action="ReadList" data-ajax="true" data-ajax-method="get" data-ajax-update="#readList">
+
     <span>2080</span>
     <select id="months" name="month">
         <option value="1">Baishak</option>
@@ -22,23 +24,16 @@
         <option value="11">Falgun</option>
         <option value="12">Chaitra</option>
     </select>
+    <input class="btn btn-primary" id="selectedMonth" type="submit" value="submit" hidden/>
 </form>
 <script>
-    var selectElement = document.getElementById('months');
-
-    selectElement.addEventListener('change', function () {
-        localStorage.setItem('selectedMonth', selectElement.value);
-        document.getElementById('myForm').submit();
-    });
-
-    window.addEventListener('load', function () {
-        var selectedMonth = localStorage.getItem('selectedMonth');
-        if (selectedMonth) {
-            selectElement.value = selectedMonth;
-        }
+    $('#months').on('change',function(){
+        $('#selectedMonth').click();
     });
 </script>
-<a asp-action="ReadList" asp-controller="ApiEventDate" data-ajax="true" data-ajax-method="get" data-ajax-update="#readList" hidden id="btnlist"></a>
+
+<a asp-action="ReadList" asp-controller="ApiEventDate" data-ajax="true" data-ajax-method="get" data-ajax-update="#readList" id="btnlist" hidden></a>
+
 <table class="table">
     <thead>
         <tr>
@@ -61,8 +56,3 @@
 
     </tbody>
 </table>
-<script>
-    $(document).ready(function(){
-        $('#btnlist').click();
-    });
-</script>

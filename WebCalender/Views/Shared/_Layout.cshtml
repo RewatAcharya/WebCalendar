@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="~/css/nepali.datepicker.v4.0.1.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebCalender.styles.css" asp-append-version="true" />
+
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/js/nepali.datepicker.v4.0.1.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 </head>
 <body>
     <header>
@@ -74,12 +82,19 @@
         </div>
     </div>
 
-    
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="~/js/nepali.datepicker.v4.0.1.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+
+    <script>
+        $(document).ready(function (){ 
+            $('#btnlist')[0].click();
+            
+            
+        });
+        deletePage=function(xhr){
+            $('#btnlist')[0].click();
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

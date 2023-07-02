@@ -15,7 +15,7 @@ namespace WebCalender.Controllers
             List<CalendarEventCategory>? events = new List<CalendarEventCategory>();
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync("https://apitest.lunarit.com.np/api/apiEventCategory/geteventcategories"))
+                using (var response = await httpClient.GetAsync("http://apitest.lunarit.com.np/api/apiEventCategory/geteventcategories"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     events = JsonConvert.DeserializeObject<List<CalendarEventCategory>>(apiResponse);
@@ -37,7 +37,7 @@ namespace WebCalender.Controllers
             using (var httpClient = new HttpClient())
             {
                 StringContent content = new StringContent(JsonConvert.SerializeObject(calendarEventDate), Encoding.UTF8, "application/json");
-                using (var response = await httpClient.PostAsync("https://apitest.lunarit.com.np/api/apiEventDate/AddCalendarEventDate", content))
+                using (var response = await httpClient.PostAsync("http://apitest.lunarit.com.np/api/apiEventDate/AddCalendarEventDate", content))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                 }
@@ -46,15 +46,16 @@ namespace WebCalender.Controllers
         }
 
         public async Task<IActionResult> Read()
-        {            
+        {
             return View();
         }
-        public async Task<IActionResult> ReadList(int? month = 3)
+        
+        public async Task<IActionResult> ReadList(int month = 3)
         {
             List<CalendarEventDate> eventList = new List<CalendarEventDate>();
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync("https://apitest.lunarit.com.np/api/apiEventDate/GetEventDayList/2080/" + month))
+                using (var response = await httpClient.GetAsync("http://apitest.lunarit.com.np/api/apiEventDate/GetEventDayList/2080/" + month))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     eventList = JsonConvert.DeserializeObject<List<CalendarEventDate>>(apiResponse);
@@ -68,7 +69,7 @@ namespace WebCalender.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.DeleteAsync("https://apitest.lunarit.com.np/api/apiEventDate/DeleteCalendarEventDate/" + id))
+                using (var response = await httpClient.DeleteAsync("http://apitest.lunarit.com.np/api/apiEventDate/DeleteCalendarEventDate/" + id))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                 }

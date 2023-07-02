@@ -21,7 +21,7 @@ namespace WebCalender.Controllers
             using (var httpClient = new HttpClient())
             {
                 StringContent content = new StringContent(JsonConvert.SerializeObject(calenderEventCategory), Encoding.UTF8, "application/json");
-                using (var response = await httpClient.PostAsync("https://apitest.lunarit.com.np/api/apiEventCategory/addeventcategory", content))
+                using (var response = await httpClient.PostAsync("http://apitest.lunarit.com.np/api/apiEventCategory/addeventcategory", content))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                 }
@@ -34,7 +34,7 @@ namespace WebCalender.Controllers
             List<CalendarEventCategory> eventList = new List<CalendarEventCategory>();
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync("https://apitest.lunarit.com.np/api/apiEventCategory/geteventcategories"))
+                using (var response = await httpClient.GetAsync("http://apitest.lunarit.com.np/api/apiEventCategory/geteventcategories"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     eventList = JsonConvert.DeserializeObject<List<CalendarEventCategory>>(apiResponse);
@@ -49,7 +49,7 @@ namespace WebCalender.Controllers
             List<CalendarEventCategory> eventList = new List<CalendarEventCategory>();
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync("https://apitest.lunarit.com.np/api/apiEventCategory/geteventcategories"))
+                using (var response = await httpClient.GetAsync("http://apitest.lunarit.com.np/api/apiEventCategory/geteventcategories"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     eventList = JsonConvert.DeserializeObject<List<CalendarEventCategory>>(apiResponse);
@@ -68,7 +68,7 @@ namespace WebCalender.Controllers
             {
                 StringContent content = new StringContent(JsonConvert.SerializeObject(calendarEventCategory), Encoding.UTF8, "application/json");
 
-                using (var response = await httpClient.PutAsync("https://apitest.lunarit.com.np/api/apiEventCategory/updateeventcategory", content))
+                using (var response = await httpClient.PutAsync("http://apitest.lunarit.com.np/api/apiEventCategory/updateeventcategory", content))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                 }
@@ -82,7 +82,7 @@ namespace WebCalender.Controllers
             List<CalendarEventCategory> eventList = new List<CalendarEventCategory>();
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync("https://apitest.lunarit.com.np/api/apiEventCategory/geteventcategories"))
+                using (var response = await httpClient.GetAsync("http://apitest.lunarit.com.np/api/apiEventCategory/geteventcategories"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     eventList = JsonConvert.DeserializeObject<List<CalendarEventCategory>>(apiResponse);
@@ -97,7 +97,7 @@ namespace WebCalender.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.DeleteAsync("https://apitest.lunarit.com.np/api/apiEventCategory/deleteeventcategory/" + id))
+                using (var response = await httpClient.DeleteAsync("http://apitest.lunarit.com.np/api/apiEventCategory/deleteeventcategory/" + id))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     
