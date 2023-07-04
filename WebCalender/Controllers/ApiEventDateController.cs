@@ -50,9 +50,15 @@ namespace WebCalender.Controllers
             return View();
         }
         
-        public async Task<IActionResult> ReadList(int month = 3)
+        public async Task<IActionResult> ReadList(int? month)
         {
-            List<CalendarEventDate> eventList = new List<CalendarEventDate>();
+            if (month == null)
+            {
+                DateTime dateTime = DateTime.Today;
+                DateTime nepaliYear = dateTime.AddYears(56).AddMonths(8).AddDays(15);
+                month = nepaliYear.Month;
+            }
+            List<CalendarEventDate>? eventList = new List<CalendarEventDate>();
             using (var httpClient = new HttpClient())
             {
                 using (var response = await httpClient.GetAsync("http://apitest.lunarit.com.np/api/apiEventDate/GetEventDayList/2080/" + month))

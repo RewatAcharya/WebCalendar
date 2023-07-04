@@ -2,7 +2,10 @@
 
 @{
     ViewData["Title"] = "Read";
+   // var message = ViewBag.Message;
 }
+
+
 
 <h1>Your Events are shown below:-</h1>
 
@@ -28,25 +31,26 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @item.EventId
-            </td>
-            <td>
-                @item.EventName
-            </td>
-            <td>
-                @item.EventColor
-            </td>
-            <td>
-                @item.RemarkPosition
-            </td>
-            <td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.EventId
+                </td>
+                <td>
+                    @item.EventName
+                </td>
+                <td>
+                    @item.EventColor
+                </td>
+                <td>
+                    @item.RemarkPosition
+                </td>
+                <td>
                     <a class="btn btn-outline-primary" asp-action="UpdateEventCategory" asp-controller="ApiEventCategory" asp-route-id="@item.EventId">Edit</a>
                     <a class="btn btn-outline-danger" asp-action="DeleteEventCategory" asp-controller="ApiEventCategory" asp-route-id="@item.EventId">Delete</a>
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

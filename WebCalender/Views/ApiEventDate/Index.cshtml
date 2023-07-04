@@ -4,7 +4,6 @@
     ViewData["Title"] = "Add Event Date";
 }
 
-
 <form asp-action="Index" asp-controller="ApiEventDate" method="post" data-ajax="true" data-ajax-method="post"  data-ajax-complete="postEvent">
 `       <div class="modal-content">
             <div class="modal-header">
@@ -40,9 +39,9 @@
         postEvent = function (xhr) {
             alert("Event Added Succeffuly");
             $('.btn-close').click();
+            location.reload();
         }
     });
-   
 </script>
 
 @section Scripts {

@@ -4,8 +4,11 @@
     ViewData["Title"] = "Read";
 }
 
+
 <h1>Read</h1>
 @ViewBag.month
+
+
 
 <form asp-controller="ApiEventDate" asp-action="ReadList" data-ajax="true" data-ajax-method="get" data-ajax-update="#readList">
 
@@ -34,7 +37,7 @@
 
 <a asp-action="ReadList" asp-controller="ApiEventDate" data-ajax="true" data-ajax-method="get" data-ajax-update="#readList" id="btnlist" hidden></a>
 
-<table class="table">
+<table class="table table-responsive table-bordered border-secondary table-striped table-hover">
     <thead>
         <tr>
             <th>
@@ -49,7 +52,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.EventDescription)
             </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody id="readList">

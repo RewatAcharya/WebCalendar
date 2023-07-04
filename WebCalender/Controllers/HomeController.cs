@@ -26,10 +26,16 @@ namespace WebCalender.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         
-        public async Task<IActionResult> Calendar(int month = 3)
+        public async Task<IActionResult> Index(int? month)
         {
-
-            List<CalendarEventDate> eventDayList = new List<CalendarEventDate>();
+            if(month == null)
+            {
+                DateTime dateTime = DateTime.Today;
+                DateTime nepaliYear = dateTime.AddYears(56).AddMonths(8).AddDays(15);
+                month = nepaliYear.Month;
+            }
+            ViewBag.Today = month;
+            List<CalendarEventDate>? eventDayList = new List<CalendarEventDate>();
             using (var httpClient = new HttpClient())
             {
                 using (var response = await httpClient.GetAsync($"http://apitest.lunarit.com.np/api/apiEventDate/GetEventDayList/2080/{month}"))
@@ -40,7 +46,7 @@ namespace WebCalender.Controllers
             }
 
 
-            List<CalendarEventCategory> eventList = new List<CalendarEventCategory>();
+            List<CalendarEventCategory>? eventList = new List<CalendarEventCategory>();
             using (var httpClient = new HttpClient())
             {
                 using (var response = await httpClient.GetAsync("http://apitest.lunarit.com.np/api/apiEventCategory/geteventcategories"))
@@ -52,7 +58,7 @@ namespace WebCalender.Controllers
 
 
 
-            List<DayList> dayList = new List<DayList>();
+            List<DayList>? dayList = new List<DayList>();
             using (var httpClient = new HttpClient())
             {
                 using (var response = await httpClient.GetAsync($"http://apitest.lunarit.com.np/api/apidaylist/getdaylist/2080/{month}"))
@@ -63,12 +69,8 @@ namespace WebCalender.Controllers
             }
             ViewBag.EventDayList = eventDayList;
             ViewBag.EventList = eventList;
-            return PartialView("_Calendar",dayList);
+            return View(dayList);
         }
 
-        public async Task<IActionResult> Index()
-        {
-            return View();
-        }
     }
 }

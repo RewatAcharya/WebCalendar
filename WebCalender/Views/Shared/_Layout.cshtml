@@ -93,6 +93,7 @@
         });
         deletePage=function(xhr){
             $('#btnlist')[0].click();
+            location.reload();
         }
     </script>
     @await RenderSectionAsync("Scripts", required: false)

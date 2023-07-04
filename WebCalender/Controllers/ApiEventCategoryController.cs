@@ -29,19 +29,26 @@ namespace WebCalender.Controllers
             return Redirect("GetEventCategories");
         }
 
+        
         public async Task<IActionResult> GetEventCategories()
         {
-            List<CalendarEventCategory> eventList = new List<CalendarEventCategory>();
+            List<CalendarEventCategory>? eventList = new List<CalendarEventCategory>();
             using (var httpClient = new HttpClient())
             {
                 using (var response = await httpClient.GetAsync("http://apitest.lunarit.com.np/api/apiEventCategory/geteventcategories"))
                 {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    string? apiResponse = await response.Content.ReadAsStringAsync();
                     eventList = JsonConvert.DeserializeObject<List<CalendarEventCategory>>(apiResponse);
+                    if (eventList != null)
+                    {
+                        ViewBag.Message = "Event are shown successfully.";
+                    }
+
                 }
             }
             return View(eventList);
         }
+
 
         
         public async Task<IActionResult> UpdateEventCategory(int id)
