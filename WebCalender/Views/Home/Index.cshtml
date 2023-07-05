@@ -1,10 +1,13 @@
-﻿@model IEnumerable<DayList>
+﻿@using System.Globalization;
+@model IEnumerable<DayList>
 
 @{
+    
     ViewData["Title"] = "Home Page";
     var eventDayList = ViewBag.EventDayList as List<CalendarEventDate>;
     var eventList = ViewBag.EventList as List<CalendarEventCategory>;
 }
+
 
 
 <div class="container">
@@ -47,10 +50,7 @@
                 });
             </script>
         </div>
-
-       
-
-        <div class="col-6 text-end">@ViewBag.Today</div>
+        <div class="col-6 text-end">@ViewBag.EnglishMonth</div>
     </div>
     <div class="col-12 table-responsive">
         <table class="table table-bordered text-center p-2 mb-2 shadow" style="background-color:#ffffcc;">
@@ -100,6 +100,7 @@
                                 {
                                     
                                     string today = year + "-" + month + "-" + count;
+                                    bool hasDesc = false;
                                     foreach (var item in eventDayList)
                                     {
                                         foreach (var item2 in eventList)
@@ -107,24 +108,51 @@
                                             if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "InPlace")
                                             {
                                                 tdColor = item2.EventColor;
-                                                <span style="color: @tdColor">@item.EventDescription</span>
+                                                <div onMouseOver="this.style.overflow='visible'" onmouseout="this.style.overflow='hidden'" style="height: 22px; width: 70px; overflow:hidden; float:left; color: @tdColor">@item.EventDescription</div>
                                                 <br />
+                                                <a class="btn" asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                    
+                                                    <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@count</span>
+                                                   
+                                                </a>
+                                                hasDesc = true;
+
                                             }
                                             if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "None")
                                             {
                                                 tdColor = item2.EventColor;
+                                                <a class="btn" asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+
+                                                    <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@count</span>
+                                                   
+                                                </a>
+                                                hasDesc = true;
+                                            }
+                                            if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "Footer")
+                                            {
+                                                tdColor = item2.EventColor;
+                                                <a class="btn" asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+
+                                                    <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@count</span>
+
+                                                </a>
+                                                hasDesc = true;
                                             }
                                         }
                                     }
-                                    <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                        <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@count</span>
-                                    </a>
+                                    if (!hasDesc)
+                                    {
+                                        <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                            <span style="font-size: 20px; font-weight:bold;">@count</span>
+                                        </a>
+                                    }
                                     <br />
                                     <span style="float: right; color: @tdColor">@Model.First(d => d.Year == year && d.Month == month && d.Day == count).EnglishDate.Day</span>
                                 }
                                 @if (newVal <= maxval)
                                 {
                                     string today = year + "-" + month + "-" + newVal;
+                                    bool hasDesc = false;
                                     foreach (var item in eventDayList)
                                     {
                                         foreach (var item2 in eventList)
@@ -132,7 +160,56 @@
                                             if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "InPlace")
                                             {
                                                 tdColor = item2.EventColor;
-                                                <span style="color: @tdColor">@item.EventDescription</span>
+                                                <a asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+
+                                                    <div onMouseOver="this.style.overflow='visible'" onmouseout="this.style.overflow='hidden'" style="height: 22px; width: 70px; overflow:hidden; float:left; color: @tdColor">@item.EventDescription</div>
+                                                    <br />
+                                                    <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@maxval</span>
+                                                    <br />
+                                                </a>
+                                                hasDesc = true;
+
+                                            }
+                                            if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "None")
+                                            {
+                                                tdColor = item2.EventColor;
+                                                <a asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+
+                                                    <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@maxval</span>
+                                                    <br />
+                                                </a>
+                                                hasDesc = true;
+                                            }
+                                            if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "Footer")
+                                            {
+                                                tdColor = item2.EventColor;
+                                                <a asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+
+                                                    <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@maxval</span>
+                                                    <br />
+                                                </a>
+                                                hasDesc = true;
+                                            }
+                                        }
+                                    }
+                                    if (!hasDesc)
+                                    {
+                                        <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@maxval" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                            <span style="font-size: 20px; font-weight:bold;">@maxval</span>
+                                        </a>
+                                        <br />
+                                    }
+
+
+@*
+                                    foreach (var item in eventDayList)
+                                    {
+                                        foreach (var item2 in eventList)
+                                        {
+                                            if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "InPlace")
+                                            {
+                                                tdColor = item2.EventColor;
+                                                <div onMouseOver="this.style.overflow='visible'" onmouseout="this.style.overflow='hidden'" style="height: 22px; width: 70px; overflow:hidden; float:left; color: @tdColor">@item.EventDescription</div>
                                                 <br />
                                             }
                                             if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "None")
@@ -141,10 +218,10 @@
                                             }
                                         }
                                     }
-                                    <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@newVal" name="@month" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                         <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@newVal</span>
                                     </a>
-                                    <br />
+                                    <br />*@
                                     <span style="float: right; color: @tdColor">@Model.FirstOrDefault(d => d.Year == year && d.Month == month && d.Day == newVal).EnglishDate.Day</span>
                                 }
                             </td>

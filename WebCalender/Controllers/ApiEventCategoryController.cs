@@ -39,11 +39,6 @@ namespace WebCalender.Controllers
                 {
                     string? apiResponse = await response.Content.ReadAsStringAsync();
                     eventList = JsonConvert.DeserializeObject<List<CalendarEventCategory>>(apiResponse);
-                    if (eventList != null)
-                    {
-                        ViewBag.Message = "Event are shown successfully.";
-                    }
-
                 }
             }
             return View(eventList);

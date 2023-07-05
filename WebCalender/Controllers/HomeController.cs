@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Globalization;
 using WebCalender.Models;
 
 namespace WebCalender.Controllers
@@ -28,13 +29,44 @@ namespace WebCalender.Controllers
         
         public async Task<IActionResult> Index(int? month)
         {
-            if(month == null)
+            
+            //getting month dynamically....
+            if (month == null)
             {
                 DateTime dateTime = DateTime.Today;
                 DateTime nepaliYear = dateTime.AddYears(56).AddMonths(8).AddDays(15);
                 month = nepaliYear.Month;
             }
-            ViewBag.Today = month;
+
+            var selectedEmonth = month;
+            string selectedEmonthName = string.Empty;
+            string selectedEmonthName2 = string.Empty;
+
+            if (selectedEmonth != null)
+            {
+                DateTimeFormatInfo dateFormatInfo = CultureInfo.CurrentCulture.DateTimeFormat;
+                int adjustedMonth = (int)selectedEmonth + 3;
+
+                if (adjustedMonth <= 11)
+                {
+                    selectedEmonthName = dateFormatInfo.GetMonthName(adjustedMonth);
+                    selectedEmonthName2 = dateFormatInfo.GetMonthName(adjustedMonth + 1);
+                }
+                else
+                {
+
+                    selectedEmonthName = dateFormatInfo.GetMonthName(adjustedMonth - 12);
+                    selectedEmonthName2 = dateFormatInfo.GetMonthName(adjustedMonth - 11);
+                }
+            }
+            else
+            {
+                selectedEmonthName = "Unknown";
+            }
+            //shows english month in Jun/Jul format....
+            ViewBag.EnglishMonth = selectedEmonthName + "/" + selectedEmonthName2;
+
+
             List<CalendarEventDate>? eventDayList = new List<CalendarEventDate>();
             using (var httpClient = new HttpClient())
             {
