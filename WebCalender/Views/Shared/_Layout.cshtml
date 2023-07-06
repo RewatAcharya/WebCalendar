@@ -41,11 +41,11 @@
                         }
                     </ul>
                       
-
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <p>Welcome, <strong>@User.FindFirst(ClaimTypes.Name)?.Value</strong>
+                        <p>Welcome, <strong>@User.FindFirst("UserName")?.Value</strong>
                             <a class="btn btn-primary" asp-area="" asp-controller="ApiUserList" asp-action="Logout">LogOut</a>
+                            <a class="btn btn-primary" asp-area="" asp-controller="ApiUserList" asp-route-id="@User.FindFirst(ClaimTypes.Name)?.Value" asp-action="Profile">Profile</a>
                         </p>
                     }
                     else
@@ -95,8 +95,6 @@
             </div>
         </div>
     </div>
-
-
 
 
     <script>

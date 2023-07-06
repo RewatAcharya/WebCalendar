@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using System.Text;
 using WebCalender.Models;
+using System.Net.Http;
 
 namespace WebCalender.Controllers
 {
@@ -31,7 +32,8 @@ namespace WebCalender.Controllers
                         {
                             var claims = new List<Claim>
                                {
-                                   new Claim(ClaimTypes.Name, item.UserName),
+                                   new Claim(ClaimTypes.Name, item.UserId.ToString()),
+                                   new Claim("UserName", item.UserName),
                                    new Claim(ClaimTypes.Role, item.UserRole)
                                };
 
@@ -62,11 +64,6 @@ namespace WebCalender.Controllers
                 using (var response = await httpClient.PostAsync("http://apitest.lunarit.com.np/api/apiuserlist/adduser", content))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    if(apiResponse != "true")
-                    {
-                        ViewBag.Message = "Registration failed";
-                        return PartialView();
-                    }
                 }
             }
             return RedirectToAction("Index", "ApiUserList");            
@@ -82,5 +79,35 @@ namespace WebCalender.Controllers
             return RedirectToAction("Index", "ApiUserList");
         }
 
+
+        public async Task<IActionResult> Profile(int id)
+        {
+            List<UserList> users = new List<UserList>();
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync("http://apitest.lunarit.com.np/api/apiUserList/getusers"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    users = JsonConvert.DeserializeObject<List<UserList>>(apiResponse);
+                }
+            }
+            var list = users?.Where(x => x.UserId == id).FirstOrDefault();
+           
+            return View(list);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Profile(UserList user)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                StringContent content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+                using (var response = await httpClient.PutAsync("http://apitest.lunarit.com.np/api/apiuserlist/updateUser", content))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                }
+            }
+            return RedirectToAction("Index", "ApiUserList");
+        }
     }
 }

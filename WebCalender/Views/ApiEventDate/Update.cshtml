@@ -1,4 +1,5 @@
-﻿@model CalendarEventDate
+﻿@using System.Security.Claims;
+@model CalendarEventDate
 
 @{
     ViewData["Title"] = "Update Event Date";
@@ -12,8 +13,15 @@
             </div>
             <div class="modal-body">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="DateId" class="control-label"></label>
+                <input asp-for="DateId" class="form-control" readonly />
+                <span asp-validation-for="DateId" class="text-danger"></span>
+            </div>
+
                 <div class="form-group">
-                    <input asp-for="NepaliDate" class="form-control"/>
+                <label asp-for="NepaliDate" class="control-label"></label>
+                    <input asp-for="NepaliDate" class="form-control" readonly/>
                     <span asp-validation-for="NepaliDate" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -29,15 +37,19 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                @if (@User.FindFirst(ClaimTypes.Role)?.Value == "Admin"){
                 <input type="submit" value="Update" class="btn btn-primary" />
+                }
+            
             </div>
         </div>
 </form>
 
+
 <script>
     $(document).ready(function(){       
         postEvent = function (xhr) {
-            alert("Event Added Succeffuly");
+            alert("Event Updated Succeffuly");
             $('.btn-close').click();
             location.reload();
         }

@@ -1,4 +1,4 @@
-﻿@using System.Globalization;
+﻿@using System.Security.Claims;
 @model IEnumerable<DayList>
 
 @{
@@ -53,16 +53,16 @@
         <div class="col-6 text-end">@ViewBag.EnglishMonth</div>
     </div>
     <div class="col-12 table-responsive">
-        <table class="table table-bordered text-center p-2 mb-2 shadow" style="background-color:#ffffcc;">
+        <table class="table table-responsive table-bordered text-center p-2 mb-2 shadow" style="background-color:#ffffcc;">
             <thead>
                 <tr class="bg-info" style="border: 2px solid black;">
-                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Sun<br />आइतबार</th>
-                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Mon<br />सोमबार</th>
-                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Tue<br />मंगलबार</th>
-                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Wed<br />बुधबार</th>
-                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Thu<br />बिहीबार</th>
-                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Fri<br />शुक्रबार</th>
-                    <th class="bg-opacity-90 bg-danger pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Sat<br />शनिबार</th>
+                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Sun</th>
+                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Mon</th>
+                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Tue</th>
+                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Wed</th>
+                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Thu</th>
+                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Fri</th>
+                    <th class="bg-opacity-90 bg-danger pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Sat</th>
                 </tr>
             </thead>
             <tbody class="mt-2">
@@ -142,9 +142,16 @@
                                     }
                                     if (!hasDesc)
                                     {
-                                        <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                            <span style="font-size: 20px; font-weight:bold;">@count</span>
-                                        </a>
+                                        @if (@User.FindFirst(ClaimTypes.Role)?.Value == "Admin")
+                                        {
+                                            <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                <span style="font-size: 20px; font-weight:bold;">@count</span>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="btn" style="font-size: 20px; font-weight:bold;">@count</span>
+                                        }
                                     }
                                     <br />
                                     <span style="float: right; color: @tdColor">@Model.First(d => d.Year == year && d.Month == month && d.Day == count).EnglishDate.Day</span>
@@ -164,7 +171,7 @@
 
                                                     <div onMouseOver="this.style.overflow='visible'" onmouseout="this.style.overflow='hidden'" style="height: 22px; width: 70px; overflow:hidden; float:left; color: @tdColor">@item.EventDescription</div>
                                                     <br />
-                                                    <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@maxval</span>
+                                                    <span class="btn" style="color: @tdColor ; font-size: 20px; font-weight:bold;">@maxval</span>
                                                     <br />
                                                 </a>
                                                 hasDesc = true;
@@ -175,7 +182,7 @@
                                                 tdColor = item2.EventColor;
                                                 <a asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
 
-                                                    <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@maxval</span>
+                                                    <span class="btn" style="color: @tdColor ; font-size: 20px; font-weight:bold;">@maxval</span>
                                                     <br />
                                                 </a>
                                                 hasDesc = true;
@@ -185,7 +192,7 @@
                                                 tdColor = item2.EventColor;
                                                 <a asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
 
-                                                    <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@maxval</span>
+                                                    <span class="btn" style="color: @tdColor ; font-size: 20px; font-weight:bold;">@maxval</span>
                                                     <br />
                                                 </a>
                                                 hasDesc = true;
@@ -194,34 +201,18 @@
                                     }
                                     if (!hasDesc)
                                     {
-                                        <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@maxval" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                            <span style="font-size: 20px; font-weight:bold;">@maxval</span>
-                                        </a>
+                                        @if (@User.FindFirst(ClaimTypes.Role)?.Value == "Admin")
+                                        {
+                                            <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@maxval" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                <span style="font-size: 20px; font-weight:bold;">@maxval</span>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="btn" style="font-size: 20px; font-weight:bold;">@maxval</span>
+                                        }
                                         <br />
                                     }
-
-
-@*
-                                    foreach (var item in eventDayList)
-                                    {
-                                        foreach (var item2 in eventList)
-                                        {
-                                            if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "InPlace")
-                                            {
-                                                tdColor = item2.EventColor;
-                                                <div onMouseOver="this.style.overflow='visible'" onmouseout="this.style.overflow='hidden'" style="height: 22px; width: 70px; overflow:hidden; float:left; color: @tdColor">@item.EventDescription</div>
-                                                <br />
-                                            }
-                                            if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "None")
-                                            {
-                                                tdColor = item2.EventColor;
-                                            }
-                                        }
-                                    }
-                                    <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@newVal" name="@month" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                        <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@newVal</span>
-                                    </a>
-                                    <br />*@
                                     <span style="float: right; color: @tdColor">@Model.FirstOrDefault(d => d.Year == year && d.Month == month && d.Day == newVal).EnglishDate.Day</span>
                                 }
                             </td>

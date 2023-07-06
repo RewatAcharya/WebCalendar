@@ -1,13 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.JSInterop.Implementation;
 using Newtonsoft.Json;
+using System.Security.Claims;
 using System.Text;
 using WebCalender.Models;
 
 namespace WebCalender.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ApiEventCategoryController : Controller
     {
+        
         public IActionResult Index()
         {
             return View();
@@ -15,6 +19,7 @@ namespace WebCalender.Controllers
 
         public ViewResult AddEventCategories() => View();
 
+      
         [HttpPost]
         public async Task<IActionResult> AddEventCategories(CalendarEventCategory calenderEventCategory)
         {

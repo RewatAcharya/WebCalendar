@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +12,7 @@ namespace WebCalender.Controllers
 {
     public class ApiEventDateController : Controller
     {
+        
         public async Task<IActionResult> Index(string param)
         {
             List<CalendarEventCategory>? events = new List<CalendarEventCategory>();
@@ -35,8 +37,7 @@ namespace WebCalender.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(string param)
         {
-            string dateString = param;
-            DateTime date = DateTime.ParseExact(dateString, "yyyy-M-d", null);
+            DateTime date = DateTime.ParseExact(param, "yyyy-M-d", null);
             int month = date.Month;
 
             List<CalendarEventCategory>? eventCategory = new List<CalendarEventCategory>();
@@ -52,7 +53,7 @@ namespace WebCalender.Controllers
             ViewBag.eventList = elist;
 
 
-            List<CalendarEventDate> events = new List<CalendarEventDate>();
+            List<CalendarEventDate>? events = new List<CalendarEventDate>();
             using (var httpClient = new HttpClient())
             {
                 using (var response = await httpClient.GetAsync("http://apitest.lunarit.com.np/api/apiEventDate/GetEventDayList/2080/" + month))
@@ -63,34 +64,6 @@ namespace WebCalender.Controllers
             }
             var list = events?.Where(x => x.NepaliDate == param).FirstOrDefault();
             return PartialView(list);
-
-
-
-          /*  List<CalendarEventDate>? events = new List<CalendarEventDate>();
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync("http://apitest.lunarit.com.np/api/apiEventDate/GetEventDayList/2080/" + month))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    events = JsonConvert.DeserializeObject<List<CalendarEventDate>>(apiResponse);
-                }
-            }
-            var elist = new SelectList(events, nameof(CalendarEventCategory.EventName), nameof(CalendarEventCategory.EventName));
-            ViewBag.eventList = elist;
-            foreach (var item in events)
-            {
-                if(item.NepaliDate == param)
-                {
-                    CalendarEventDate dates = new CalendarEventDate
-                    {
-                        
-                        EventDescription = item.EventDescription,
-                        NepaliDate = param
-                    };
-                    return PartialView(dates);
-                }
-            }
-            return RedirectToAction("Index");*/
         }
 
         [HttpPost]
@@ -107,7 +80,8 @@ namespace WebCalender.Controllers
              return RedirectToAction("Index","Home");
         }
 
-        public async Task<IActionResult> Read()
+        [Authorize(Roles = "Admin")]
+        public IActionResult Read()
         {
             return View();
         }
@@ -132,6 +106,7 @@ namespace WebCalender.Controllers
             return PartialView("_ReadList", eventList);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
