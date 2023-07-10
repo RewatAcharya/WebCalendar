@@ -16,6 +16,80 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
    
+    <style>
+        th {
+            font-size: 20px;
+        }
+        .event{
+            font-size: 1.2rem;
+            width: 60px;
+            height: 30px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .calendarDay{
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .englishDay{
+            float: right;
+            font-size: small;
+        }
+
+
+        @@media only screen and (max-width: 600px) {
+          body {
+              font-size: 18px;
+          }
+            .event {
+                font-size: 1rem;
+                width: 30px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .calendarDay {
+                font-size: 15px;
+                font-weight: normal;
+            }
+
+            .englishDay{
+                float: none;
+                font-size: x-small;
+            }
+        }
+
+
+        @@media only screen and (max-width: 400px) {
+            
+            th{
+                font-size: 12px;
+            }
+            .event {
+                font-size: 0.8rem;
+                width: 20px;
+                height: 20px;
+                overflow: hidden;
+                flex-flow: wrap-reverse;
+                display: flex;
+                display: inline-flex;
+
+            }
+
+            .calendarDay {
+                font-size: 12px;
+                font-weight: normal;
+            }
+
+            .englishDay {
+                font-size: xx-small;
+                float: none;
+            }
+        }
+
+    </style>
+
+
 </head>
 <body>
     <header>

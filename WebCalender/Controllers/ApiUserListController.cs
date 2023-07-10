@@ -19,7 +19,7 @@ namespace WebCalender.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(string UserName, string UserPassword)
         {
-            List<UserList> userList = new List<UserList>();
+            List<UserList>? userList = new List<UserList>();
             using (var httpClient = new HttpClient())
             {
                 using (var response = await httpClient.GetAsync("http://apitest.lunarit.com.np/api/apiUserList/getusers"))
@@ -82,7 +82,7 @@ namespace WebCalender.Controllers
 
         public async Task<IActionResult> Profile(int id)
         {
-            List<UserList> users = new List<UserList>();
+            List<UserList>? users = new List<UserList>();
             using (var httpClient = new HttpClient())
             {
                 using (var response = await httpClient.GetAsync("http://apitest.lunarit.com.np/api/apiUserList/getusers"))

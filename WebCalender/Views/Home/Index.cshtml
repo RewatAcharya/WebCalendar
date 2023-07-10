@@ -10,6 +10,17 @@
 
 
 
+<div class="row">
+    <div class="col-6">
+
+    </div>
+    <div class="col-6 text-end" >
+
+    </div>
+</div>
+
+
+
 <div class="container">
     <h2 class="text-center">Calender <span>2080</span></h2>
     <div class="row">
@@ -52,17 +63,19 @@
         </div>
         <div class="col-6 text-end">@ViewBag.EnglishMonth</div>
     </div>
-    <div class="col-12 table-responsive">
-        <table class="table table-responsive table-bordered text-center p-2 mb-2 shadow" style="background-color:#ffffcc;">
+    <div class=" container-fluid-sm">
+        <div class="row">
+            <div class="col-12 table-responsive">
+        <table class="table table-bordered text-center shadow">
             <thead>
                 <tr class="bg-info" style="border: 2px solid black;">
-                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Sun</th>
-                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Mon</th>
-                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Tue</th>
-                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Wed</th>
-                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Thu</th>
-                    <th class="pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Fri</th>
-                    <th class="bg-opacity-90 bg-danger pt-3 pb-3" style="font-weight: bolder; font-size: 20px;">Sat</th>
+                    <th class="pt-3 pb-3">Sun</th>
+                    <th class="pt-3 pb-3">Mon</th>
+                    <th class="pt-3 pb-3">Tue</th>
+                    <th class="pt-3 pb-3">Wed</th>
+                    <th class="pt-3 pb-3">Thu</th>
+                    <th class="pt-3 pb-3">Fri</th>
+                    <th class="bg-opacity-90 bg-danger pt-3 pb-3">Sat</th>
                 </tr>
             </thead>
             <tbody class="mt-2">
@@ -88,7 +101,7 @@
                     <tr>
                         @for (int j = 0; j < 7; j++)
                         {
-                            <td style="height:10px; border: 1px solid black;">
+                            <td style="width:70px; border: 1px solid black;">
                                 @{
                                     string tdColor = "black";
                                     if (j == 6)
@@ -100,6 +113,8 @@
                                 {
                                     
                                     string today = year + "-" + month + "-" + count;
+                                            <div class="englishDay" style="color: @tdColor">@Model.First(d => d.Year == year && d.Month == month && d.Day == count).EnglishDate.Day</div>
+                                            <br />
                                     bool hasDesc = false;
                                     foreach (var item in eventDayList)
                                     {
@@ -108,13 +123,14 @@
                                             if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "InPlace")
                                             {
                                                 tdColor = item2.EventColor;
-                                                <div onMouseOver="this.style.overflow='visible'" onmouseout="this.style.overflow='hidden'" style="height: 22px; width: 70px; overflow:hidden; float:left; color: @tdColor">@item.EventDescription</div>
-                                                <br />
+                                                
                                                 <a class="btn" asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                                     
-                                                    <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@count</span>
+                                                    <span class="calendarDay" style="color: @tdColor">@count</span>
                                                    
                                                 </a>
+                                                   <div class="event" onMouseOver="this.style.overflow='visible'" onmouseout="this.style.overflow='hidden'" style="color: @tdColor">@item.EventDescription</div>
+
                                                 hasDesc = true;
 
                                             }
@@ -122,9 +138,7 @@
                                             {
                                                 tdColor = item2.EventColor;
                                                 <a class="btn" asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-
-                                                    <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@count</span>
-                                                   
+                                                            <span class="calendarDay" style="color: @tdColor">@count</span>
                                                 </a>
                                                 hasDesc = true;
                                             }
@@ -132,9 +146,7 @@
                                             {
                                                 tdColor = item2.EventColor;
                                                 <a class="btn" asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-
-                                                    <span style="color: @tdColor ; font-size: 20px; font-weight:bold;">@count</span>
-
+                                                            <span class="calendarDay" style="color: @tdColor">@count</span>
                                                 </a>
                                                 hasDesc = true;
                                             }
@@ -145,20 +157,21 @@
                                         @if (@User.FindFirst(ClaimTypes.Role)?.Value == "Admin")
                                         {
                                             <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                                <span style="font-size: 20px; font-weight:bold;">@count</span>
+                                             <span class="calendarDay" style="color:@tdColor">@count</span>
                                             </a>
                                         }
                                         else
                                         {
-                                            <span class="btn" style="font-size: 20px; font-weight:bold;">@count</span>
+                                            <span class="calendarDay" style="color:@tdColor">@count</span>
                                         }
                                     }
-                                    <br />
-                                    <span style="float: right; color: @tdColor">@Model.First(d => d.Year == year && d.Month == month && d.Day == count).EnglishDate.Day</span>
+                                    
                                 }
                                 @if (newVal <= maxval)
                                 {
                                     string today = year + "-" + month + "-" + newVal;
+                                    <div class="englishDay" style="color: @tdColor">@Model.FirstOrDefault(d => d.Year == year && d.Month == month && d.Day == newVal).EnglishDate.Day</div>
+                                    <br />
                                     bool hasDesc = false;
                                     foreach (var item in eventDayList)
                                     {
@@ -169,11 +182,12 @@
                                                 tdColor = item2.EventColor;
                                                 <a asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
 
-                                                    <div onMouseOver="this.style.overflow='visible'" onmouseout="this.style.overflow='hidden'" style="height: 22px; width: 70px; overflow:hidden; float:left; color: @tdColor">@item.EventDescription</div>
-                                                    <br />
-                                                    <span class="btn" style="color: @tdColor ; font-size: 20px; font-weight:bold;">@maxval</span>
+
+                                                    <span class="calendarDay" style="color: @tdColor">@maxval</span>
                                                     <br />
                                                 </a>
+                                                        <div class="event" onMouseOver="this.style.overflow='visible'" onmouseout="this.style.overflow='hidden'" style="color: @tdColor">@item.EventDescription</div>
+
                                                 hasDesc = true;
 
                                             }
@@ -182,7 +196,7 @@
                                                 tdColor = item2.EventColor;
                                                 <a asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
 
-                                                    <span class="btn" style="color: @tdColor ; font-size: 20px; font-weight:bold;">@maxval</span>
+                                                    <span class="calendarDay" style="color: @tdColor">@maxval</span>
                                                     <br />
                                                 </a>
                                                 hasDesc = true;
@@ -192,7 +206,7 @@
                                                 tdColor = item2.EventColor;
                                                 <a asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
 
-                                                    <span class="btn" style="color: @tdColor ; font-size: 20px; font-weight:bold;">@maxval</span>
+                                                    <span class="calendarDay" style="color: @tdColor">@maxval</span>
                                                     <br />
                                                 </a>
                                                 hasDesc = true;
@@ -204,17 +218,15 @@
                                         @if (@User.FindFirst(ClaimTypes.Role)?.Value == "Admin")
                                         {
                                             <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@maxval" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                                <span style="font-size: 20px; font-weight:bold;">@maxval</span>
+                                                <span class="calendarDay" style="color:@tdColor">@maxval</span>
                                             </a>
                                         }
                                         else
                                         {
-                                            <span class="btn" style="font-size: 20px; font-weight:bold;">@maxval</span>
+                                            <span class="calendarDay" style="color:@tdColor">@maxval</span>
                                         }
-                                        <br />
                                     }
-                                    <span style="float: right; color: @tdColor">@Model.FirstOrDefault(d => d.Year == year && d.Month == month && d.Day == newVal).EnglishDate.Day</span>
-                                }
+                              }
                             </td>
                             count++;
                             newVal++;
@@ -223,6 +235,8 @@
                 }
             </tbody>
         </table>
+    </div>
+        </div>
     </div>
 </div>
 

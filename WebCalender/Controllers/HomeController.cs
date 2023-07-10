@@ -54,7 +54,6 @@ namespace WebCalender.Controllers
                 }
                 else
                 {
-
                     selectedEmonthName = dateFormatInfo.GetMonthName(adjustedMonth - 12);
                     selectedEmonthName2 = dateFormatInfo.GetMonthName(adjustedMonth - 11);
                 }
