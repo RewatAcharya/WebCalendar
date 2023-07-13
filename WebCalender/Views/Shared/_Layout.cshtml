@@ -20,20 +20,42 @@
         th {
             font-size: 20px;
         }
-        .event{
-            font-size: 1.2rem;
-            width: 60px;
-            height: 30px;
+
+        td.day-cell {
+            height: 5rem;
+            max-width: 100px;
+            overflow: hidden;
+            max-width: 10%;
+            max-height: 25%;
+            position: relative;
+        }
+
+        .event {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            max-width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
+            white-space: nowrap;
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
         }
+
         .calendarDay{
             font-size: 20px;
             font-weight: bold;
+            display: inline-block;
+            position: relative;
+            z-index: 1;
+            padding: 2em;
+            margin: -2em;
+        
         }
         .englishDay{
-            float: right;
+            justify-content:end;
             font-size: small;
+            float: right;
         }
 
 
@@ -41,52 +63,54 @@
           body {
               font-size: 18px;
           }
-            .event {
-                font-size: 1rem;
-                width: 30px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
 
             .calendarDay {
                 font-size: 15px;
-                font-weight: normal;
+                font-weight: bold;
             }
 
             .englishDay{
-                float: none;
                 font-size: x-small;
             }
         }
 
 
-        @@media only screen and (max-width: 400px) {
+        @@media only screen and (max-width: 420px) {
             
             th{
                 font-size: 12px;
             }
             .event {
                 font-size: 0.8rem;
-                width: 20px;
-                height: 20px;
                 overflow: hidden;
-                flex-flow: wrap-reverse;
-                display: flex;
-                display: inline-flex;
 
             }
 
             .calendarDay {
                 font-size: 12px;
-                font-weight: normal;
             }
 
             .englishDay {
                 font-size: xx-small;
-                float: none;
             }
         }
 
+        @@media only screen and (max-width: 385px) {
+            .englishDay {
+                float:none;
+            }
+
+            .calendarDay {
+                font-size: 10px;
+            }
+            .event{
+                font-size:0.6rem;
+            }
+
+            .table > :not(caption) > * > * {
+                padding: 0 0;
+            }
+        }
     </style>
 
 
@@ -109,17 +133,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="ApiEventCategory" asp-action="GetEventCategories">Events</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ApiEventDate" asp-action="Read">Calendar Event</a>
-                        </li>
                         }
                     </ul>
                       
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <p>Welcome, <strong>@User.FindFirst("UserName")?.Value</strong>
-                            <a class="btn btn-primary" asp-area="" asp-controller="ApiUserList" asp-action="Logout">LogOut</a>
-                            <a class="btn btn-primary" asp-area="" asp-controller="ApiUserList" asp-route-id="@User.FindFirst(ClaimTypes.Name)?.Value" asp-action="Profile">Profile</a>
+                        <p class="nav-item"><strong>@User.FindFirst("UserName")?.Value</strong>
+                            <a class="btn btn-primary nav-item" asp-area="" asp-controller="ApiUserList" asp-route-id="@User.FindFirst(ClaimTypes.Name)?.Value" asp-action="Profile">Profile</a>
+                            <a class="nav-item btn btn-danger" asp-area="" asp-controller="ApiUserList" asp-action="Logout">LogOut</a>
+
                         </p>
                     }
                     else
@@ -177,10 +199,7 @@
             
             
         });
-        deletePage=function(xhr){
-            $('#btnlist')[0].click();
-            location.reload();
-        }
+        
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

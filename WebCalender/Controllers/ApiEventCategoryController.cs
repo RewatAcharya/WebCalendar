@@ -8,6 +8,7 @@ using WebCalender.Models;
 
 namespace WebCalender.Controllers
 {
+    
     [Authorize(Roles = "Admin")]
     public class ApiEventCategoryController : Controller
     {

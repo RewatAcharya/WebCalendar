@@ -16,7 +16,10 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     
 })
-.AddCookie();
+.AddCookie(options =>
+{
+    options.LoginPath = "/ApiUserList/Index";
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -38,6 +38,55 @@ namespace WebCalender.Controllers
                 month = nepaliYear.Month;
             }
 
+                string monthName = "";
+                switch (month)
+                {
+                    case 1:
+                        monthName = "Baisakh";
+                        break;
+                    case 2:
+                        monthName = "Jestha";
+                        break;
+                    case 3:
+                        monthName = "Asadh";
+                        break;
+                    case 4:
+                        monthName = "Sharawan";
+                        break;
+                    case 5:
+                        monthName = "Bhadra";
+                        break;
+                    case 6:
+                        monthName = "Asoj";
+                        break;
+                    case 7:
+                        monthName = "Kartik";
+                        break;
+                    case 8:
+                        monthName = "Mangisr";
+                        break;
+                    case 9:
+                        monthName = "Poush";
+                        break;
+                    case 10:
+                        monthName = "Magh";
+                        break;
+                    case 11:
+                        monthName = "Falgun";
+                        break;
+                    case 12:
+                        monthName = "Chaitra";
+                        break;
+                    default:
+                        break;
+                }
+               ViewBag.MonthName = monthName;
+            
+
+
+
+
+
             var selectedEmonth = month;
             string selectedEmonthName = string.Empty;
             string selectedEmonthName2 = string.Empty;
@@ -51,6 +100,11 @@ namespace WebCalender.Controllers
                 {
                     selectedEmonthName = dateFormatInfo.GetMonthName(adjustedMonth);
                     selectedEmonthName2 = dateFormatInfo.GetMonthName(adjustedMonth + 1);
+                }
+                else if (adjustedMonth == 12)
+                {
+                    selectedEmonthName = dateFormatInfo.GetMonthName(adjustedMonth);
+                    selectedEmonthName2 = dateFormatInfo.GetMonthName(adjustedMonth - 11);
                 }
                 else
                 {

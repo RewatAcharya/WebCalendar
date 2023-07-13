@@ -39,6 +39,7 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 @if (@User.FindFirst(ClaimTypes.Role)?.Value == "Admin"){
                 <input type="submit" value="Update" class="btn btn-primary" />
+                <a asp-action="Delete" asp-controller="ApiEventDate" asp-route-id="@Model.DateId" class="btn btn-danger" method="post" data-ajax="true" data-ajax-method="post" data-ajax-confirm="Are you sure?" data-ajax-complete="deletePage">Delete</a>
                 }
             
             </div>
@@ -51,6 +52,10 @@
         postEvent = function (xhr) {
             alert("Event Updated Succeffuly");
             $('.btn-close').click();
+            location.reload();
+        }
+        deletePage = function (xhr) {
+            $('.btn-close')[0].click();
             location.reload();
         }
     });

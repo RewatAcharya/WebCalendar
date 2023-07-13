@@ -4,18 +4,17 @@
     ViewData["Title"] = "Read";
 }
 
-
-
 <h1>Your Events are shown below:-</h1>
 
 <p>
     <a class="btn btn-primary" asp-action="AddEventCategories">Create New</a>
 </p>
+<div class="table-responsive readEvent">
 <table class="table table-responsive table-bordered border-secondary table-striped table-hover">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.EventId)
+                S.N.
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.EventName)
@@ -30,11 +29,15 @@
         </tr>
     </thead>
     <tbody>
+
+        @{
+           int count = 1;
+        }
         @foreach (var item in Model)
-        {
-            <tr>
+            {
+                <tr>
                 <td>
-                    @item.EventId
+                    @count
                 </td>
                 <td>
                     @item.EventName
@@ -47,9 +50,26 @@
                 </td>
                 <td>
                     <a class="btn btn-outline-primary" asp-action="UpdateEventCategory" asp-controller="ApiEventCategory" asp-route-id="@item.EventId">Edit</a>
-                    <a class="btn btn-outline-danger" asp-action="DeleteEventCategory" asp-controller="ApiEventCategory" asp-route-id="@item.EventId">Delete</a>
+                    <a asp-action="Delete" asp-controller="ApiEventCategory" asp-route-id="@item.EventId" class="btn btn-outline-danger" data-ajax="true" data-ajax-method="post" data-ajax-confirm="Are you sure?" data-ajax-complete="deletePage">Delete</a>
+
                 </td>
             </tr>
+            count++;
         }
     </tbody>
 </table>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        postEvent = function (xhr) {
+            alert("Event Updated Succeffuly");
+            $('.btn-close').click();
+            location.reload();
+        }
+        deletePage = function (xhr) {
+            location.reload();
+        }
+    });
+</script>

@@ -2,46 +2,38 @@
 @model IEnumerable<DayList>
 
 @{
-    
+
     ViewData["Title"] = "Home Page";
     var eventDayList = ViewBag.EventDayList as List<CalendarEventDate>;
     var eventList = ViewBag.EventList as List<CalendarEventCategory>;
+    DateTime currentDate = Model.Min(m => m.EnglishDate);
+    int enlishYear = currentDate.Year;
+    int year = Model.Min(m => m.Year);
 }
 
 
-
-<div class="row">
-    <div class="col-6">
-
-    </div>
-    <div class="col-6 text-end" >
-
-    </div>
-</div>
-
-
-
 <div class="container">
-    <h2 class="text-center">Calender <span>2080</span></h2>
+    <div class="display-4 text-center ">Calender <span>2080</span></div>
     <div class="row">
-        <div class="col-6">
+        <div class="col text-center">
             <form asp-controller="Home" asp-action="Index" data-ajax="true" data-ajax-method="get" data-ajax-update="#calendar">
-                <h5><select id="months" name="month">
-                    <option value="1">Baishak</option>
-                    <option value="2">Jesth</option>
-                    <option value="3">Asar</option>
-                    <option value="4">Shrawn</option>
-                    <option value="5">Bhadra</option>
-                    <option value="6">Aswin</option>
-                    <option value="7">Kartik</option>
-                    <option value="8">Mangsir</option>
-                    <option value="9">Poush</option>
-                    <option value="10">Magh</option>
-                    <option value="11">Falgun</option>
-                    <option value="12">Chaitra</option>
+                <label class="form-label">Select month: </label>
+                    <select style="font-size:larger;" id="months" name="month">
+                        <option value="1">Baishak</option>
+                        <option value="2">Jesth</option>
+                        <option value="3">Asar</option>
+                        <option value="4">Shrawn</option>
+                        <option value="5">Bhadra</option>
+                        <option value="6">Aswin</option>
+                        <option value="7">Kartik</option>
+                        <option value="8">Mangsir</option>
+                        <option value="9">Poush</option>
+                        <option value="10">Magh</option>
+                        <option value="11">Falgun</option>
+                        <option value="12">Chaitra</option>
                     </select>
                     <input class="btn btn-primary" id="selectMonth" type="submit" value="submit" hidden />
-                </h5>
+                
             </form>
             <script>
                 $(document).ready(function () {
@@ -61,181 +53,203 @@
                 });
             </script>
         </div>
-        <div class="col-6 text-end">@ViewBag.EnglishMonth</div>
+    </div>
+        <div class="row">
+            <div class="col-6" style="font-size:larger;">@ViewBag.MonthName @year</div>
+            <div class="col-6 text-end" style="font-size:larger;">@ViewBag.EnglishMonth @enlishYear</div>
+        
     </div>
     <div class=" container-fluid-sm">
         <div class="row">
             <div class="col-12 table-responsive">
-        <table class="table table-bordered text-center shadow">
-            <thead>
-                <tr class="bg-info" style="border: 2px solid black;">
-                    <th class="pt-3 pb-3">Sun</th>
-                    <th class="pt-3 pb-3">Mon</th>
-                    <th class="pt-3 pb-3">Tue</th>
-                    <th class="pt-3 pb-3">Wed</th>
-                    <th class="pt-3 pb-3">Thu</th>
-                    <th class="pt-3 pb-3">Fri</th>
-                    <th class="bg-opacity-90 bg-danger pt-3 pb-3">Sat</th>
-                </tr>
-            </thead>
-            <tbody class="mt-2">
-                @{
-                    int maxval = Model.Max(m => m.Day);
-                    int year = Model.Min(m => m.Year);
-                    int month = Model.Min(m => m.Month);
-                    int count = 1;
-                    DateTime currentDate = Model.Min(m => m.EnglishDate);
-                    int startDayOfWeek = (int)currentDate.DayOfWeek;
-                    int offset = (startDayOfWeek + 7) % 7;
-                    //finding the total box
-                    int totalbox = offset + maxval;
-                    //finding the remaining box to fit
-                    int remain = totalbox - 35;
-                    //finding the new value
-                    int newVal = maxval - remain + 1;
-                    count = 1 - offset;
+                <table class="table table-bordered text-center shadow mt-2" style="background-color:#e4f5f5;">
+                    <thead>
+                        <tr class="bg-info" style="border: 2px solid black;">
+                            <th class="pt-3 pb-3">Sun</th>
+                            <th class="pt-3 pb-3">Mon</th>
+                            <th class="pt-3 pb-3">Tue</th>
+                            <th class="pt-3 pb-3">Wed</th>
+                            <th class="pt-3 pb-3">Thu</th>
+                            <th class="pt-3 pb-3">Fri</th>
+                            <th class="bg-opacity-90 bg-danger pt-3 pb-3">Sat</th>
+                        </tr>
+                    </thead>
+                    <tbody class="mt-2">
+                        @{
+                            int maxval = Model.Max(m => m.Day);
+                            
+                            int month = Model.Min(m => m.Month);
+                            int count = 1;
+                            
+                            int startDayOfWeek = (int)currentDate.DayOfWeek;
+                            int offset = (startDayOfWeek + 7) % 7;
+                            //finding the total box
+                            int totalbox = offset + maxval;
+                            //finding the remaining box to fit
+                            int remain = totalbox - 35;
+                            //finding the new value
+                            int newVal = maxval - remain + 1;
+                            count = 1 - offset;
 
-                }
-                @for (int i = 0; i < 5; i++)
-                {
-                    <tr>
-                        @for (int j = 0; j < 7; j++)
+                        }
+                        @for (int i = 0; i < 5; i++)
                         {
-                            <td style="width:70px; border: 1px solid black;">
-                                @{
-                                    string tdColor = "black";
-                                    if (j == 6)
-                                    {
-                                        tdColor = "red";
-                                    }
-                                }
-                                @if (count > 0 && count <= maxval)
+                            <tr>
+                                @for (int j = 0; j < 7; j++)
                                 {
-                                    
-                                    string today = year + "-" + month + "-" + count;
-                                            <div class="englishDay" style="color: @tdColor">@Model.First(d => d.Year == year && d.Month == month && d.Day == count).EnglishDate.Day</div>
-                                            <br />
-                                    bool hasDesc = false;
-                                    foreach (var item in eventDayList)
-                                    {
-                                        foreach (var item2 in eventList)
-                                        {
-                                            if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "InPlace")
+                                    <td class="day-cell" style="height: 5rem; width:70px; border: 1px solid black;">
+                                        @{
+                                            string tdColor = "black";
+                                            if (j == 6)
                                             {
-                                                tdColor = item2.EventColor;
-                                                
-                                                <a class="btn" asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                tdColor = "red";
+                                            }
+                                        }
+                                        @if (count > 0 && count <= maxval)
+                                        {
+                                            string today = year + "-" + month + "-" + count;
+                                            bool hasDesc = false;
+                                            foreach (var item in eventDayList)
+                                            {
+                                                foreach (var item2 in eventList)
+                                                {
+                                                    if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "InPlace")
+                                                    {
+                                                        tdColor = item2.EventColor;
+                                                        <div data-toggle="tooltip" data-placement="top" title="@item.EventDescription">
+                                                        <div class="englishDay" style="color: @tdColor">@Model.First(d => d.Year == year && d.Month == month && d.Day == count).EnglishDate.Day</div>
+
+                                                        <a class="btn" asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+
+                                                            <div class="calendarDay" style="color: @tdColor">@count</div>
+
+                                                        </a>
+                                                       
+                                                        <div class="event" onMouseOver="this.style.overflow='visible'"
+                                                             onmouseout="this.style.overflow='hidden'" style="color: @tdColor">
+                                                            @item.EventDescription
+                                                        </div>
+                                                        </div>
+
+                                                        hasDesc = true;
+
+                                                    }
+                                                    else if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "None")
+                                                    {
+                                                        tdColor = item2.EventColor;
+                                                        <div class="englishDay" style="color: @tdColor">@Model.First(d => d.Year == year && d.Month == month && d.Day == count).EnglishDate.Day</div>
+
+                                                        <a class="btn" asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                            <div class="calendarDay" style="color: @tdColor">@count</div>
+                                                        </a>
+                                                        hasDesc = true;
+                                                    }
+                                                    else if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "Footer")
+                                                    {
+                                                        tdColor = item2.EventColor;
+                                                        <div class="englishDay" style="color: @tdColor">@Model.First(d => d.Year == year && d.Month == month && d.Day == count).EnglishDate.Day</div>
+
+                                                        <a class="btn" asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                            <div class="calendarDay" style="color: @tdColor">@count</div>
+                                                        </a>
+                                                        hasDesc = true;
+                                                    }
                                                     
-                                                    <span class="calendarDay" style="color: @tdColor">@count</span>
-                                                   
-                                                </a>
-                                                   <div class="event" onMouseOver="this.style.overflow='visible'" onmouseout="this.style.overflow='hidden'" style="color: @tdColor">@item.EventDescription</div>
-
-                                                hasDesc = true;
-
+                                                }
                                             }
-                                            if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "None")
+                                            if (!hasDesc)
                                             {
-                                                tdColor = item2.EventColor;
-                                                <a class="btn" asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                                            <span class="calendarDay" style="color: @tdColor">@count</span>
-                                                </a>
-                                                hasDesc = true;
-                                            }
-                                            if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "Footer")
-                                            {
-                                                tdColor = item2.EventColor;
-                                                <a class="btn" asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                                            <span class="calendarDay" style="color: @tdColor">@count</span>
-                                                </a>
-                                                hasDesc = true;
+                                                <div class="englishDay" style="color: @tdColor">@Model.First(d => d.Year == year && d.Month == month && d.Day == count).EnglishDate.Day</div>
+
+                                                @if (@User.FindFirst(ClaimTypes.Role)?.Value == "Admin")
+                                                {
+
+                                                    <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                        <div class="calendarDay" style="color:@tdColor">@count</div>
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <div class="btn calendarDay" style="color:@tdColor">@count</div>
+                                                }
                                             }
                                         }
-                                    }
-                                    if (!hasDesc)
-                                    {
-                                        @if (@User.FindFirst(ClaimTypes.Role)?.Value == "Admin")
+                                        @if (newVal <= maxval)
                                         {
-                                            <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@count" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                             <span class="calendarDay" style="color:@tdColor">@count</span>
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <span class="calendarDay" style="color:@tdColor">@count</span>
-                                        }
-                                    }
-                                    
-                                }
-                                @if (newVal <= maxval)
-                                {
-                                    string today = year + "-" + month + "-" + newVal;
-                                    <div class="englishDay" style="color: @tdColor">@Model.FirstOrDefault(d => d.Year == year && d.Month == month && d.Day == newVal).EnglishDate.Day</div>
-                                    <br />
-                                    bool hasDesc = false;
-                                    foreach (var item in eventDayList)
-                                    {
-                                        foreach (var item2 in eventList)
-                                        {
-                                            if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "InPlace")
+                                            string today = year + "-" + month + "-" + newVal;
+                                            
+                                            bool hasDesc = false;
+                                            foreach (var item in eventDayList)
                                             {
-                                                tdColor = item2.EventColor;
-                                                <a asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                foreach (var item2 in eventList)
+                                                {
+                                                    if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "InPlace")
+                                                    {
+                                                        tdColor = item2.EventColor;
+                                                        <div class="englishDay" style="color: @tdColor">@Model.FirstOrDefault(d => d.Year == year && d.Month == month && d.Day == newVal).EnglishDate.Day</div>
+
+                                                        <a asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
 
 
-                                                    <span class="calendarDay" style="color: @tdColor">@maxval</span>
-                                                    <br />
-                                                </a>
+                                                            <div class="calendarDay" style="color: @tdColor">@maxval</div>
+                                                            <br />
+                                                        </a>
                                                         <div class="event" onMouseOver="this.style.overflow='visible'" onmouseout="this.style.overflow='hidden'" style="color: @tdColor">@item.EventDescription</div>
 
-                                                hasDesc = true;
+                                                        hasDesc = true;
 
+                                                    }
+                                                    if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "None")
+                                                    {
+                                                        tdColor = item2.EventColor;
+                                                        <div class="englishDay" style="color: @tdColor">@Model.FirstOrDefault(d => d.Year == year && d.Month == month && d.Day == newVal).EnglishDate.Day</div>
+
+                                                        <a asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+
+                                                            <div class="calendarDay" style="color: @tdColor">@maxval</div>
+                                                            <br />
+                                                        </a>
+                                                        hasDesc = true;
+                                                    }
+                                                    if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "Footer")
+                                                    {
+                                                        tdColor = item2.EventColor;
+                                                        <div class="englishDay" style="color: @tdColor">@Model.FirstOrDefault(d => d.Year == year && d.Month == month && d.Day == newVal).EnglishDate.Day</div>
+
+                                                        <a asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+
+                                                            <div class="calendarDay" style="color: @tdColor">@maxval</div>
+                                                            <br />
+                                                        </a>
+                                                        hasDesc = true;
+                                                    }
+                                                }
                                             }
-                                            if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "None")
+                                            if (!hasDesc)
                                             {
-                                                tdColor = item2.EventColor;
-                                                <a asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                <div class="englishDay" style="color: @tdColor">@Model.FirstOrDefault(d => d.Year == year && d.Month == month && d.Day == newVal).EnglishDate.Day</div>
 
-                                                    <span class="calendarDay" style="color: @tdColor">@maxval</span>
-                                                    <br />
-                                                </a>
-                                                hasDesc = true;
-                                            }
-                                            if (item.NepaliDate == (today) && item.EventName == item2.EventName && item2.RemarkPosition == "Footer")
-                                            {
-                                                tdColor = item2.EventColor;
-                                                <a asp-controller="ApiEventDate" asp-action="Update" asp-route-param="@year-@month-@newVal" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-
-                                                    <span class="calendarDay" style="color: @tdColor">@maxval</span>
-                                                    <br />
-                                                </a>
-                                                hasDesc = true;
+                                                @if (@User.FindFirst(ClaimTypes.Role)?.Value == "Admin")
+                                                {
+                                                    <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@maxval" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                        <div class="calendarDay" style="color:@tdColor">@maxval</div>
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <div class="btn calendarDay" style="color:@tdColor">@maxval</div>
+                                                }
                                             }
                                         }
-                                    }
-                                    if (!hasDesc)
-                                    {
-                                        @if (@User.FindFirst(ClaimTypes.Role)?.Value == "Admin")
-                                        {
-                                            <a class="btn" asp-controller="ApiEventDate" asp-action="Index" asp-route-param="@year-@month-@maxval" data-ajax="true" data-ajax-method="get" data-ajax-update="#page" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                                <span class="calendarDay" style="color:@tdColor">@maxval</span>
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <span class="calendarDay" style="color:@tdColor">@maxval</span>
-                                        }
-                                    }
-                              }
-                            </td>
-                            count++;
-                            newVal++;
+                                    </td>
+                                    count++;
+                                    newVal++;
+                                }
+                            </tr>
                         }
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

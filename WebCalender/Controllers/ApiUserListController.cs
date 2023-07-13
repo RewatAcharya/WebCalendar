@@ -107,7 +107,7 @@ namespace WebCalender.Controllers
                     string apiResponse = await response.Content.ReadAsStringAsync();
                 }
             }
-            return RedirectToAction("Index", "ApiUserList");
+            return RedirectToAction("Logout", "ApiUserList");
         }
     }
 }
